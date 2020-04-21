@@ -12,7 +12,7 @@ def threaded(c):
             break
         data = data[::-1]
         c.send(data)
-        c.close()
+    c.close()
 
 def Main():
     host= ''
@@ -32,7 +32,7 @@ def Main():
         c, addr = s.accept()
 
         print_lock.acquire()
-        print(f'Connected to {addr[0]}:{addr[1]}')
+        print(f'Connected to {addr[0]}: ')
 
         start_new_thread(threaded, (c,))
 
