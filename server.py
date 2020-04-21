@@ -1,5 +1,5 @@
 import socket, threading
-from _thread import *
+from _thread import start_new_thread
 
 print_lock = threading.Lock()
 
