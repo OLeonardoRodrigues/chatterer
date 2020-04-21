@@ -7,8 +7,8 @@ def threaded(c):
     while True:
         data = c.recv(1024)
         if not data:
-            print('Bye')
-            print_lock.release
+            print('Disconnected... ')
+            print_lock.release()
             break
         data = data[::-1]
         c.send(data)
