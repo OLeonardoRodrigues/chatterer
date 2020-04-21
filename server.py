@@ -6,12 +6,11 @@ print_lock = threading.Lock()
 def threaded(c):
     while True:
         data = c.recv(1024)
+        print(str(data.decode("ascii")))
         if not data:
             print('Disconnected... ')
             print_lock.release()
             break
-        data = data[::-1]
-        c.send(data)
     c.close()
 
 def Main():
@@ -29,10 +28,9 @@ def Main():
     print('Socket is listening... ')
 
     while True:
-        c, addr = s.accept()
+        c = s.accept()
 
         print_lock.acquire()
-        print(f'Connected to {addr[0]}: ')
 
         start_new_thread(threaded, (c,))
 
@@ -40,4 +38,3 @@ def Main():
 
 if __name__ == '__main__':
     Main()
-
