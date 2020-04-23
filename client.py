@@ -1,29 +1,10 @@
 import socket
 
-def Main():
-    host = '127.0.0.1'
-    port = 12345
+s = socket.socket()
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+host = socket.gethostname()
+port = 12345
 
-    s.connect((host, port))
-
-    message = 'tset'
-
-    while True:
-        s.send(message.encode('ascii'))
-
-        data = s.recv(1024)
-
-        print(f'Received from the server: {str(data.decode("ascii"))}')
-
-        ans = input('\nDo you want to continue(y/n)? ')
-
-        if(ans=='y'):
-            continue
-        else:
-            break
-    s.close()
-
-if __name__ == '__main__':
-    Main()
+s.connect((host, port))
+print(s.recv(1024))
+s.close()
