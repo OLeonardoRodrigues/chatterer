@@ -1,8 +1,14 @@
-import socket, threading
+import socket, threading, sys
 
 def main():
-    # Socket creation
-    s = socket.socket()
+    try:
+        # Socket creation
+        s = socket.socket()
+    except:
+        print( 'Socket creation error! ' )
+        sys.exit()
+    else: 
+        print( 'Socket created succesfully! \n' )
 
     # Constants declaration
     host = socket.gethostname()
@@ -11,13 +17,18 @@ def main():
     # Binding to Host
     s.bind( ( host, port ) )
 
-    # Start listening for connections
-    s.listen( 5 )
+    try:
+        # Start listening for connections
+        s.listen( 5 )
+    except:
+        print( 'Failed to start listening! ' )
+    else:
+        print( 'Now listening... \n' )
 
     # Accepting incoming connections
     connectionRcvd, srcAddress = s.accept()
 
-    print( f'Received new connection from: { srcAddress[ 0 ] }:{ srcAddress [ 1 ] }' )
+    print( f'Received new connection from: { srcAddress[ 0 ] }:{ srcAddress [ 1 ] }\n' )
 
     threading.Thread( target = sendToConnection, args = ( connectionRcvd, srcAddress ) ).start()
     threading.Thread( target = rcvFromConnection, args = ( connectionRcvd, srcAddress ) ).start()

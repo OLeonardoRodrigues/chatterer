@@ -13,18 +13,20 @@ def getDestinationAddress():
     if( not port ):
         port = 8080
     
+    print()
+
     return( host, port )
 
 def main():
     try:
         threading.Thread( target = rcvFromConnection ).start()
     except:
-        print( f'Thread creation failed ' )
+        print( f'Thread creation failed! ' )
     
     try:
         threading.Thread( target = sendToConnection ).start()
     except:
-        print( f'Thread creation failed ' )
+        print( f'Thread creation successful! \n' )
 
 def rcvFromConnection():
     # Start main loop
@@ -54,10 +56,10 @@ try:
     # Socket creation
     s = socket.socket()
 except:
-    print( 'Socket creation error ' )
+    print( 'Socket creation error! ' )
     sys.exit()
 else: 
-    print( 'Socket created succesfully! ' )
+    print( 'Socket created succesfully! \n' )
 
 # Constants declaration
 host, port = getDestinationAddress()
@@ -66,10 +68,10 @@ try:
     # Connecting to server
     s.connect( ( host, port ) )
 except:
-    print( f'Connection failed to address: { host }:{ port } ' )
+    print( f'Connection failed to address: { host }:{ port }! ' )
     sys.exit()
 else:
-    print( f'Connected to { host }:{ port }! ' )
+    print( f'Connected to { host }:{ port }! \n' )
 
 if( __name__ == '__main__' ):
     main()
