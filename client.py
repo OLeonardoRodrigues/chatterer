@@ -1,32 +1,44 @@
-import socket, threading
+import socket, threading, sys
 
-# Socket creation
-s = socket.socket()
+def getDestinationAddress():
+    host = ''
+    port = 0
 
-# Constants declaration
-host = socket.gethostname()
-port = 12345
+    host = input( 'Enter destination IP address: ' )
+    port = input( 'Enter destination port: ' )
 
-# Connecting to server
-s.connect( ( host, port ) )
+    if( not host ):
+        host = socket.gethostname()
+    
+    if( not port ):
+        port = 8080
+    
+    return( host, port )
 
 def main():
-    threading.Thread( target = outConnection ).start()
-    threading.Thread( target = inConnection ).start()
+    try:
+        threading.Thread( target = rcvFromConnection ).start()
+    except:
+        print( f'Thread creation failed ' )
+    
+    try:
+        threading.Thread( target = sendToConnection ).start()
+    except:
+        print( f'Thread creation failed ' )
 
-def outConnection():
+def rcvFromConnection():
     # Start main loop
     while( True ):         
-        # Inputing & sending new message 
+        # Receiving & printing new message 
         receivedMessage = s.recv( 1024 )
-        print( f'<<-- {receivedMessage.decode()} ' )
+        print( f'{ host } -->> {receivedMessage.decode()} ' )
 
         # Loop breaking condition
         if( receivedMessage == '!exit' or receivedMessage == '!quit' ):
             s.close()
             break
 
-def inConnection():
+def sendToConnection():
     # Start main loop
     while( True ):         
         # Inputing & sending new message 
@@ -37,6 +49,27 @@ def inConnection():
         if( message == '!exit' or message == '!quit' ):
             s.close()
             break
+
+try:
+    # Socket creation
+    s = socket.socket()
+except:
+    print( 'Socket creation error ' )
+    sys.exit()
+else: 
+    print( 'Socket created succesfully! ' )
+
+# Constants declaration
+host, port = getDestinationAddress()
+
+try:
+    # Connecting to server
+    s.connect( ( host, port ) )
+except:
+    print( f'Connection failed to address: { host }:{ port } ' )
+    sys.exit()
+else:
+    print( f'Connected to { host }:{ port }! ' )
 
 if( __name__ == '__main__' ):
     main()

@@ -6,7 +6,7 @@ def main():
 
     # Constants declaration
     host = socket.gethostname()
-    port = 12345
+    port = 8080
 
     # Binding to Host
     s.bind( ( host, port ) )
@@ -17,13 +17,12 @@ def main():
     # Accepting incoming connections
     connectionRcvd, srcAddress = s.accept()
 
-    threading.Thread( target = inNewConnection, args = ( connectionRcvd, srcAddress ) ).start()
-    threading.Thread( target = outNewConnection, args = ( connectionRcvd, srcAddress ) ).start()
+    print( f'Received new connection from: { srcAddress[ 0 ] }:{ srcAddress [ 1 ] }' )
 
-def inNewConnection( connectionRcvd, srcAddress ):
-    # Logging new connection
-    print( f'Received new connection from: { srcAddress }' )
+    threading.Thread( target = sendToConnection, args = ( connectionRcvd, srcAddress ) ).start()
+    threading.Thread( target = rcvFromConnection, args = ( connectionRcvd, srcAddress ) ).start()
 
+def sendToConnection( connectionRcvd, srcAddress ):
     # Start main loop
     while( True ):         
         # Inputing & sending new message 
@@ -35,15 +34,12 @@ def inNewConnection( connectionRcvd, srcAddress ):
             connectionRcvd.close()
             break
 
-def outNewConnection( connectionRcvd, srcAddress ):
-    # Logging new connection
-    print( f'Received new connection from: { srcAddress }' )
-
+def rcvFromConnection( connectionRcvd, srcAddress ):
     # Start main loop
     while( True ):         
         # Inputing & sending new message 
         receivedMessage = connectionRcvd.recv( 1024 )
-        print( f'<<-- {receivedMessage.decode()} ' )
+        print( f'{ srcAddress[ 0 ] } -->> {receivedMessage.decode()} ' )
 
         # Loop breaking condition
         if( receivedMessage == '!exit' or receivedMessage == '!quit' ):
