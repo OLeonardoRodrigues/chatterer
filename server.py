@@ -12,7 +12,12 @@ def main():
 
     # Constants declaration
     host = socket.gethostname()
-    port = 8080
+    port = 0
+    port = input( 'Enter destination port: ' )
+    print()
+    
+    if( not port ):
+        port = 8080
 
     # Binding to Host
     s.bind( ( host, port ) )
