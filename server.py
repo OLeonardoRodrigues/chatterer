@@ -15,7 +15,10 @@ def main():
     # Constants declaration
     host = socket.gethostname()
     port = 0
-    port = int(input( 'Enter destination port: ' ))
+    port = input( 'Enter destination port: ' )
+    if( port.isnumeric() ): 
+        port = int( port )
+        
     print()
     
     if( not port ):
