@@ -15,7 +15,7 @@ def main():
     # Constants declaration
     host = socket.gethostname()
     port = 0
-    port = input( 'Enter destination port: ' )
+    port = int(input( 'Enter destination port: ' ))
     print()
     
     if( not port ):
